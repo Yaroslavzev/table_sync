@@ -28,7 +28,6 @@ module TableSync
       ivar = "@#{name}".to_sym
 
       option_block ||= proc { |value| value }
-
       define_method(name) do |*args, &block|
         if args.empty? && block.nil?
           instance_variable_get(ivar)
@@ -80,5 +79,6 @@ module TableSync
     add_option(:default_values)
     add_option(:partitions)
     add_option(:skip)
+    add_option(:on_destroy)
   end
 end

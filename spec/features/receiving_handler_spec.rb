@@ -465,6 +465,22 @@ describe TableSync::ReceivingHandler do
         end
       end
 
+      context "when on_destroy is defined" do
+        let(:handler) do
+          Class.new(TableSync::ReceivingHandler).tap do |handler|
+            handler.receive("User", to_table: :players) do
+              mapping_overrides id: :external_id
+              additional_data { |project_id:| { project_id: project_id.upcase } }
+              on_destroy true
+            end
+          end
+        end
+
+        specify "ignores destroy event - uses custom destroy callback" do
+          fire_destroy_event
+        end
+      end
+
       context "when skip config is defined" do
         let(:handler) do
           handler = Class.new(TableSync::ReceivingHandler)
